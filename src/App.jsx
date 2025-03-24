@@ -23,17 +23,33 @@ function App() {
 
 
 function ConfettiBackground() {
-  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() => {
+    // Delay confetti effect by 7 seconds
+    const timer = setTimeout(() => {
+      setShowConfetti(true);
+    }, 7000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return <Confetti width={windowSize.width} height={windowSize.height} numberOfPieces={100} />;
+  return showConfetti ? (
+    <Confetti width={windowSize.width} height={windowSize.height} numberOfPieces={100} />
+  ) : null; // Show confetti only after 7 seconds
 }
 
 function ProfilePicture() {
